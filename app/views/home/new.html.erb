@@ -1,8 +1,39 @@
 
- <%= form_for :home, method: 'post', url: {action: 'create'} do |f| %>
-  <%= label(:home, 'Monument') %><br>
-  <%= f.text_field :monument_name %><br>
-  <%= f.submit "Add Monument" %><br><br>
+
+
+
+
+<%= form_for :home, method: 'post', url: {action: 'create'} do |f| %>
+  <%= label(:home, 'Search for a City') %><br>
+  <%= f.text_field :city %>
+  <%= f.submit "Search", class: 'btn btn-primary btn-sm'%><br><br>
 <% end %>
 
-<%= @res %>
+<% if @response != nil%>
+  <% @response['results'].each do |res| %>
+    <%= form_for :home, method: 'post', url: {action: "create"} do |f| %>
+
+      Name: <%= res['name'] %><br>
+      Address: <%= res['formatted_address'] %><br>
+      <% @string = res['photos']
+          @string = @string.to_s
+          @sub = @string.gsub!(/.*?(?=e"=>)/im, "")
+          @sub = @sub.to_s.split(',')[0]
+          @sub = @sub.to_s.sub!(/^e/, '')
+          @sub = @sub.to_s.gsub!(/.*?(?=>")/im, "")
+          @mid = @sub.to_s[2..-2]
+         @front = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=300&photoreference="
+         @back = "&key="+@otherkey
+          @url = @front.to_s + @mid.to_s + @back.to_s
+        %>
+      Image: <br> <img src = <%= @url %> > <br>
+      <%= f.hidden_field :name, :value => res['name'] %>
+      <%= f.hidden_field :cityName, :value => @store_city %>
+      <%= f.hidden_field :address, :value => res['formatted_address'] %>
+      <%= f.hidden_field :pic, :value => @url %>
+      <%= f.submit "Fav's", class: 'btn btn-primary btn-sm' %><br><br>
+    <% end %>
+  <% end %>
+<% end %>
+
+
