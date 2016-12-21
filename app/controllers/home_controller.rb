@@ -13,11 +13,12 @@ class HomeController < ApplicationController
   end
 
 
-def create
+  def create
     User.create(email: params[:Email],
                   )
     redirect_to "/home"
   end
+
 
 
 

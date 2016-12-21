@@ -1,2 +1,8 @@
-<h1>hello</h1>
 
+ <%= form_for :home, method: 'post', url: {action: 'create'} do |f| %>
+  <%= label(:home, 'Monument') %><br>
+  <%= f.text_field :monument_name %><br>
+  <%= f.submit "Add Monument" %><br><br>
+<% end %>
+
+<%= @res %>
